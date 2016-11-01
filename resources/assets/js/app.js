@@ -75,6 +75,7 @@ const vm = new Vue({
             category_id: ''
         },
         notes: [],
+        errors: [],
         categories: []
     },
     mounted: function () {
@@ -87,13 +88,25 @@ const vm = new Vue({
     },
     methods: {
         createNote: function () {
-            this.notes.push({
-                note: this.new_note.note,
-                category_id: this.new_note.category_id
+
+            this.errors = [];
+
+            $.ajax({
+                url: '/api/v1/notes',
+                method: 'POST',
+                data: vm.new_note,
+                dataType: 'json',
+                success: function (data) {
+                    vm.notes.push(data.note);
+                    vm.new_note.note = '';
+                    vm.new_note.category_id = '';
+                },
+                error: function (jqXHR) {
+                    vm.errors = jqXHR.responseJSON.errors;
+                }
             });
 
-            this.new_note.note = '';
-            this.new_note.category_id = '';
+
         },
         deleteNote: function (note) {
             //resource.delete({id: note.id}).then(function (response) {

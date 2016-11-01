@@ -9,7 +9,7 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th width="230px">Categoria</th>
+                    <th>Categoria</th>
                     <th>Nota</th>
                     <th width="50px">&nbsp;</th>
                 </tr>
@@ -30,6 +30,11 @@
                     </td>
                     <td>
                         <input type="text" v-model="new_note.note" class="form-control">
+                        <ul v-if="errors.length" class="text-danger">
+                            <li v-for="error in errors">
+                                @{{ error }}
+                            </li>
+                        </ul>
                     </td>
                     <td>
                         <a href="#" @click.prevent="createNote()">
