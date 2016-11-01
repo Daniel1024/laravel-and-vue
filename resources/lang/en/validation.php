@@ -112,6 +112,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'category_id'   => 'category'
+    ],
 
 ];
