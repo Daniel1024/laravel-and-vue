@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::resource('notes', 'NoteController');
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
