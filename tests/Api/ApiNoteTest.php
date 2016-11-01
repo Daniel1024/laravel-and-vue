@@ -9,6 +9,7 @@ class ApiNoteTest extends TestCase
     use DatabaseTransactions;
 
     private $note = 'Esto es una nota';
+    private $updateNote = 'Actualizando una nota';
 
     function test_list_notes()
     {
@@ -63,4 +64,77 @@ class ApiNoteTest extends TestCase
             ]
         ]);
     }
+
+    function test_can_update_a_note()
+    {
+        $category = factory(Category::class)->create();
+        $anotherCategory = factory(Category::class)->create();
+
+        $note = factory(Note::class)->make();
+
+        $category->notes()->save($note);
+
+        $this->put('api/v1/notes/'.$note->id, [
+            'note'          => $this->updateNote,
+            'category_id'   => $anotherCategory->id
+        ], ['Accept' => 'application/json']);
+
+        $this->seeInDatabase('notes', [
+            'note'          => $this->updateNote,
+            'category_id'   => $anotherCategory->id
+        ]);
+
+        $this->seeJson([
+            'success'   => true,
+            'note'      => [
+                'id'            => $note->id,
+                'note'          => $this->updateNote,
+                'category_id'   => $anotherCategory->id
+            ],
+        ]);
+    }
+
+    function test_validation_when_updating_a_note()
+    {
+        $category = factory(Category::class)->create();
+
+        $note = factory(Note::class)->make();
+
+        $category->notes()->save($note);
+
+        $this->put('api/v1/notes/'.$note->id, [
+            'note'          => '',
+            'category_id'   => 100,
+        ], ['Accept' => 'application/json']);
+
+        $this->dontSeeInDatabase('notes', [
+            'id'            => $note->id,
+            'note'          => '',
+            'category_id'   => 100,
+        ]);
+
+        $this->seeJson([
+            'success'   => false,
+            'errors'   => [
+                'The note field is required.',
+                'The selected category is invalid.'
+            ]
+        ]);
+    }
+
+    function test_can_delete_a_note()
+    {
+        $note = factory(Note::class)->create();
+
+        $this->delete('api/v1/notes/'.$note->id, [],
+            ['Accept' => 'application/json']
+        );
+
+        $this->dontSeeInDatabase('notes', $note->toArray());
+
+        $this->seeJson([
+            'success'   => true,
+        ]);
+    }
+
 }
