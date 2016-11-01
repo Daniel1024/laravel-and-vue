@@ -12,9 +12,104 @@ require('./bootstrap');
  * the body of the page. From here, you may begin adding components to
  * the application, or feel free to tweak this setup for your needs.
  */
-
+/*
 Vue.component('example', require('./components/Example.vue'));
 
 const app = new Vue({
     el: '#app'
+});
+*/
+
+function findById(items, id) {
+    for (var i in items) {
+        if (items[i].id == id) {
+            return items[i];
+        }
+    }
+    return null;
+}
+
+function assign(original, newData) {
+    for(var key in newData) {
+        original[key] = newData[key];
+    }
+}
+
+Vue.component('select-category', {
+    template: '#select_category_tpl',
+    props: ['categories', 'note']
+});
+
+Vue.component('note-row', {
+    template: '#note_row_tpl',
+    props: ['note', 'categories'],
+    data: function () {
+        return {
+            editing: false
+        };
+    },
+    computed: {
+        category_name: function () {
+            var category = findById(this.categories, this.note.category_id);
+            return category != null ? category.name : '';
+        }
+    },
+    methods: {
+        remove: function () {
+            this.$emit('delete-note', this.note);
+        },
+        edit: function () {
+            this.editing = true;
+        },
+        update: function () {
+            this.$emit('update-note', this, this.note);
+        }
+    }
+});
+
+const vm = new Vue({
+    el: '#app',
+    data: {
+        new_note: {
+            note: '',
+            category_id: ''
+        },
+        notes: [],
+        categories: []
+    },
+    mounted: function () {
+        $.getJSON('/api/v1/notes', function (notes) {
+            vm.notes = notes;
+        });
+        $.getJSON('/api/v1/categories', function (categories) {
+            vm.categories = categories;
+        });
+    },
+    methods: {
+        createNote: function () {
+            this.notes.push({
+                note: this.new_note.note,
+                category_id: this.new_note.category_id
+            });
+
+            this.new_note.note = '';
+            this.new_note.category_id = '';
+        },
+        deleteNote: function (note) {
+            //resource.delete({id: note.id}).then(function (response) {
+            var index = this.notes.indexOf(note);
+            this.notes.splice(index, 1);
+            //});
+        },
+        updateNote: function (component, note) {
+            /*resource.update({id: component.note.id}, component.draft).then(function (response) {
+                utils.assign(component.note, response.data.note);
+                component.editing = false;
+            }, function (response) {
+                component.errors = response.data.errors;
+            });*/
+            assign(component.note, note);
+            component.editing = false;
+        }
+    }
 });

@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('notes', 'NoteController');
+Route::get('categories', function () {
+    return \App\Category::all()->toArray();
+});
 
 Route::get('/user', function (Request $request) {
     return $request->user();
