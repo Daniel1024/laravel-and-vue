@@ -22,15 +22,20 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
             'note'          => 'required',
             'category_id'   => 'exists:categories,id'
         ]);
 
-        $data = $request->only(['note', 'category_id']);
-
-        $note = Note::create($data);
+        //$data = $request->only(['note', 'category_id']);
+        $category_id = null;
+        if ($request->get('category_id')!='') {
+            $category_id = $request->get('category_id');
+        }
+        $note = new Note();
+        $note->note = $request->get('note');
+        $note->category_id = $category_id;
+        $note->save();
 
         return [
             'success'   => true,
@@ -63,7 +68,13 @@ class NoteController extends Controller
             'category_id'   => 'exists:categories,id'
         ]);
 
-        $note->fill($request->all());
+        $category_id = null;
+        if ($request->get('category_id')!='') {
+            $category_id = $request->get('category_id');
+        }
+
+        $note->note = $request->get('note');
+        $note->category_id = $category_id;
         $note->save();
 
         return [

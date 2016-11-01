@@ -49,8 +49,9 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ValidationException && $request->wantsJson()) {
             return new JsonResponse([
                 'success'   => false,
-                'errors'    => $exception->getMessage(),
-                'code'      => $exception->getCode(),
+                'errors'    => [
+                    $exception->getMessage()
+                ]
             ], 404);
         }
         return parent::render($request, $exception);

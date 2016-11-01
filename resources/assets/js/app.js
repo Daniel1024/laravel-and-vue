@@ -45,7 +45,9 @@ Vue.component('note-row', {
     props: ['note', 'categories'],
     data: function () {
         return {
-            editing: false
+            editing: false,
+            errors: [],
+            draft: {}
         };
     },
     computed: {
@@ -59,12 +61,22 @@ Vue.component('note-row', {
             this.$emit('delete-note', this.note);
         },
         edit: function () {
+            this.errors = [];
+            this.draft = JSON.parse(JSON.stringify(this.note));
             this.editing = true;
         },
+        cancel: function () {
+            this.editing = false;
+        },
         update: function () {
-            this.$emit('update-note', this, this.note);
+            this.$emit('update-note', this);
         }
     }
+});
+
+Vue.component('error-list', {
+    template: '#error_list_tpl',
+    props: ['errors']
 });
 
 const vm = new Vue({
@@ -102,6 +114,7 @@ const vm = new Vue({
                     vm.new_note.category_id = '';
                 },
                 error: function (jqXHR) {
+                    console.log(jqXHR);
                     vm.errors = jqXHR.responseJSON.errors;
                 }
             });
@@ -114,15 +127,28 @@ const vm = new Vue({
             this.notes.splice(index, 1);
             //});
         },
-        updateNote: function (component, note) {
+        updateNote: function (component) {
             /*resource.update({id: component.note.id}, component.draft).then(function (response) {
                 utils.assign(component.note, response.data.note);
                 component.editing = false;
             }, function (response) {
                 component.errors = response.data.errors;
             });*/
-            assign(component.note, note);
-            component.editing = false;
+            $.ajax({
+                url: '/api/v1/notes/' + component.note.id,
+                method: 'PUT',
+                data: component.draft,
+                dataType: 'json',
+                success: function (data) {
+                    assign(component.note, data.note);
+                    component.editing = false;
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                    component.errors = jqXHR.responseJSON.errors;
+                }
+            });
+
         }
     }
 });

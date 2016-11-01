@@ -30,11 +30,7 @@
                     </td>
                     <td>
                         <input type="text" v-model="new_note.note" class="form-control">
-                        <ul v-if="errors.length" class="text-danger">
-                            <li v-for="error in errors">
-                                @{{ error }}
-                            </li>
-                        </ul>
+                        <error-list :errors="errors"></error-list>
                     </td>
                     <td>
                         <a href="#" @click.prevent="createNote()">
@@ -77,19 +73,29 @@
                 </template>
                 <template v-else>
                     <td>
-                        <select-category :categories="categories" :note="note"></select-category>
+                        <select-category :categories="categories" :note="draft"></select-category>
                     </td>
-                    <td><input v-model="note.note" type="text" class="form-control"></td>
+                    <td>
+                        <input v-model="draft.note" type="text" class="form-control">
+                        <error-list :errors="errors"></error-list>
+                    </td>
                     <td>
                         <a href="#" @click.prevent="update()">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         </a>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        <a href="#" @click.prevent="cancel()">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </a>
                     </td>
                 </template>
             </tr>
+        </template>
+        <template id="error_list_tpl">
+            <ul v-if="errors.length" class="text-danger">
+                <li v-for="error in errors">
+                    {{ error }}
+                </li>
+            </ul>
         </template>
     @endverbatim
     <script src="{{ asset('js/app.js') }}"></script>

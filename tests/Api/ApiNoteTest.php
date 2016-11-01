@@ -46,14 +46,15 @@ class ApiNoteTest extends TestCase
 
     function test_validation_when_creating_a_note()
     {
+        //$categoy = factory(Category::class)->create();
         $this->post('api/v1/notes', [
             'note'          => '',
-            'category_id'   => 100,
+            'category_id'   => 458,
         ], ['Accept' => 'application/json']);
 
         $this->dontSeeInDatabase('notes', [
             'note'          => '',
-            'category_id'   => 100,
+            'category_id'   => 458,
         ]);
 
         $this->seeJson([
