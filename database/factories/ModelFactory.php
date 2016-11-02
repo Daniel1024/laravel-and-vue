@@ -24,7 +24,16 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(\App\Category::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->sentence
+        'name' => $faker->randomElement([
+            'Laravel',
+            'Elixir',
+            'Homestead',
+            'Sass',
+            'Less',
+            'Stylus',
+            'JavaScript',
+            'Python'
+        ])
     ];
 });
 

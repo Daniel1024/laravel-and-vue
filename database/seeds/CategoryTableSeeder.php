@@ -13,7 +13,12 @@ class CategoryTableSeeder extends Seeder
     public function run()
     {
         Category::create(['name' => 'Laravel']);
-        Category::create(['name' => 'Vue.js']);
+        Category::create(['name' => 'Elixir']);
+        Category::create(['name' => 'Homestead']);
         Category::create(['name' => 'Sass']);
+        Category::create(['name' => 'Less']);
+        Category::create(['name' => 'Stylus']);
+        Category::create(['name' => 'JavaScript']);
+        Category::create(['name' => 'Python']);
     }
 }

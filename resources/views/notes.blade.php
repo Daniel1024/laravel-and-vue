@@ -1,9 +1,10 @@
 @extends('layout')
 
 @section('content')
-    <div class="row" id="app">
-        <div class="col-sm-8 col-sm-offset-2">
-            <h1>Curso de VueJS</h1>
+    <div class="container-fluid" style="background-color: white">
+        <div class="row" id="app">
+            <div class="col-sm-8 col-sm-offset-2">
+                <h1>Curso de VueJS</h1>
                 <div class="alert_container">
                     <transition name="bounce">
                         <p v-if="alert.display" class="alert alert-danger">
@@ -45,8 +46,9 @@
                     </tr>
                     </tfoot>
                 </table>
-            <hr>
-            <pre>@{{ $data }}</pre>
+                <hr>
+                <pre>@{{ $data }}</pre>
+            </div>
         </div>
     </div>
 @endsection
