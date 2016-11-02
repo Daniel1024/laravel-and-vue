@@ -88,6 +88,7 @@ const vm = new Vue({
         },
         notes: [],
         errors: [],
+        error: "",
         categories: []
     },
     mounted: function () {
@@ -114,7 +115,6 @@ const vm = new Vue({
                     vm.new_note.category_id = '';
                 },
                 error: function (jqXHR) {
-                    console.log(jqXHR);
                     vm.errors = jqXHR.responseJSON.errors;
                 }
             });
@@ -123,8 +123,22 @@ const vm = new Vue({
         },
         deleteNote: function (note) {
             //resource.delete({id: note.id}).then(function (response) {
-            var index = this.notes.indexOf(note);
-            this.notes.splice(index, 1);
+            $.ajax({
+                url: '/api/v1/notes/' + note.id,
+                method: 'DELETE',
+                dataType: 'json',
+                success: function () {
+                    var index = vm.notes.indexOf(note);
+                    vm.notes.splice(index, 1);
+                },
+                error: function (jqXHR) {
+                    vm.error = jqXHR.responseJSON.errors[0];
+                    $('#error_message').delay(5000).fadeOut(1000, function () {
+                        vm.error = '';
+                    })
+                }
+            });
+
             //});
         },
         updateNote: function (component) {
@@ -144,7 +158,6 @@ const vm = new Vue({
                     component.editing = false;
                 },
                 error: function (jqXHR) {
-                    console.log(jqXHR);
                     component.errors = jqXHR.responseJSON.errors;
                 }
             });

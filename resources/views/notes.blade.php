@@ -5,6 +5,9 @@
         <div class="col-sm-8 col-sm-offset-2">
 
             <h1>Curso de VueJS</h1>
+            <p v-show="error" class="alert alert-danger" id="error_message">
+                @{{ error }}
+            </p>
             <hr>
             <table class="table table-striped">
                 <thead>

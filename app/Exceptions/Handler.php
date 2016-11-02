@@ -46,13 +46,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof ValidationException && $request->wantsJson()) {
-            return new JsonResponse([
-                'success'   => false,
-                'errors'    => [
-                    $exception->getMessage()
-                ]
-            ], 404);
+        if (!$exception instanceof ValidationException && $request->wantsJson()) {
+           if($exception->getMessage() != 'The given data failed to pass validation.') {
+                return new JsonResponse([
+                    'success' => false,
+                    'errors' => [$exception->getMessage()]
+                ], 404);
+            }
         }
         return parent::render($request, $exception);
     }
