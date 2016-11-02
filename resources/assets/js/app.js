@@ -1,24 +1,5 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the body of the page. From here, you may begin adding components to
- * the application, or feel free to tweak this setup for your needs.
- */
-/*
-Vue.component('example', require('./components/Example.vue'));
-
-const app = new Vue({
-    el: '#app'
-});
-*/
 
 function findById(items, id) {
     for (var i in items) {
@@ -90,7 +71,10 @@ const vm = new Vue({
         },
         notes: [],
         errors: [],
-        error: "",
+        alert: {
+            message: '',
+            display: false
+        },
         categories: []
     },
     mounted: function () {
@@ -116,7 +100,7 @@ const vm = new Vue({
                 this.errors = response.data.errors;
             });
         },
-        updateNote: (component) => {
+        updateNote: function (component) {
             resource.update({id: component.note.id}, component.draft).then((response) => {
                 assign(component.note, response.data.note);
                 component.editing = false;
@@ -124,10 +108,10 @@ const vm = new Vue({
                 component.errors = response.data.errors;
             });
         },
-        deleteNote: (note) => {
+        deleteNote: function (note) {
             resource.delete({id: note.id}).then((response) => {
-                var indexNote = this.notes.indexOf(note);
-                this.notes.splice(indexNote, 1);
+                var index = this.notes.indexOf(note);
+                this.notes.splice(index, 1);
             });
         }
     }

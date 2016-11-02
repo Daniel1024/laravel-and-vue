@@ -90,7 +90,8 @@ class NoteController extends Controller
      * @return array
      */
     public function destroy(Note $note)
-    { abort(500, 'cualquier mensaje');
+    {
+        //abort(500, 'cualquier mensaje');
         $note->delete();
         return [
             'success' => true

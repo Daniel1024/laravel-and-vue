@@ -34,28 +34,13 @@ Vue.http.interceptors.push((request, next) => {
         if (response.ok) {
             return response;
         }
-        this.error = response.data.message;
-        $('#error_message').delay(5000).fadeOut(1000, function () {
-            this.error = '';
-        }.bind(this));
-        /*this.alert.message = response.data.message;
-        this.alert.display = true;
-        setTimeout(function () {
-            this.alert.display = false;
-        }.bind(this), 4000);*/
+        if (! (response.data.message === undefined)) {
+            this.alert.message = response.data.message;
+            this.alert.display = true;
+            setTimeout(function () {
+                this.alert.display = false;
+            }.bind(this), 6000);
+        }
         return response;
     });
 });
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from "laravel-echo"
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
