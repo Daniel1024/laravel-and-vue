@@ -14,11 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('notes', function () {
+        return view('notes');
+    });
 
-Route::get('notes', function () {
-    return view('notes');
+    Route::get('name', function () {
+        return \App\User::first()->name;
+    });
 });
 
-Route::get('name', function () {
-    return \App\User::first()->name;
-});
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');

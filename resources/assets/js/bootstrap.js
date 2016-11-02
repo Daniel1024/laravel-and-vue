@@ -35,7 +35,11 @@ Vue.http.interceptors.push((request, next) => {
             return response;
         }
         if (! (response.data.message === undefined)) {
-            this.alert.message = response.data.message;
+            var message = 'Ocurrio un error contacte al administrador del sistema';
+            if (response.data.message != '') {
+                message = response.data.message;
+            }
+            this.alert.message = message;
             this.alert.display = true;
             setTimeout(function () {
                 this.alert.display = false;

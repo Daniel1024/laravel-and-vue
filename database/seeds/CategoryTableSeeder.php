@@ -15,10 +15,10 @@ class CategoryTableSeeder extends Seeder
         Category::create(['name' => 'Laravel']);
         Category::create(['name' => 'Elixir']);
         Category::create(['name' => 'Homestead']);
-        Category::create(['name' => 'Sass']);
+        /*Category::create(['name' => 'Sass']);
         Category::create(['name' => 'Less']);
         Category::create(['name' => 'Stylus']);
         Category::create(['name' => 'JavaScript']);
-        Category::create(['name' => 'Python']);
+        Category::create(['name' => 'Python']);*/
     }
 }

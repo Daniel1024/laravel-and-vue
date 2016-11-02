@@ -1,5 +1,5 @@
 <template>
-    <ul v-if="errors.length" class="text-danger">
+    <ul v-if="errors && errors.length" class="text-danger">
         <li v-for="error in errors">
             {{ error }}
         </li>
