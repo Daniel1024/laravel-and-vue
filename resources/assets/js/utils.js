@@ -5,7 +5,6 @@ export default {
                 return items[i];
             }
         }
-
         return null;
     },
     assign: function (original, newData) {
