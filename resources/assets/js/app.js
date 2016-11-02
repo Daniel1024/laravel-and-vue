@@ -1,64 +1,12 @@
 require('./bootstrap');
 
+import utils from './utils';
 
-function findById(items, id) {
-    for (var i in items) {
-        if (items[i].id == id) {
-            return items[i];
-        }
-    }
-    return null;
-}
+Vue.component('error-list', require('./components/error-list.vue'));
 
-function assign(original, newData) {
-    for(var key in newData) {
-        original[key] = newData[key];
-    }
-}
+Vue.component('select-category', require('./components/select-category.vue'));
 
-Vue.component('select-category', {
-    template: '#select_category_tpl',
-    props: ['categories', 'note']
-});
-
-Vue.component('note-row', {
-    template: '#note_row_tpl',
-    props: ['note', 'categories'],
-    data: function () {
-        return {
-            editing: false,
-            errors: [],
-            draft: {}
-        };
-    },
-    computed: {
-        category_name: function () {
-            var category = findById(this.categories, this.note.category_id);
-            return category != null ? category.name : '';
-        }
-    },
-    methods: {
-        edit: function () {
-            this.errors = [];
-            this.draft = JSON.parse(JSON.stringify(this.note));
-            this.editing = true;
-        },
-        cancel: function () {
-            this.editing = false;
-        },
-        update: function () {
-            this.$emit('update-note', this);
-        },
-        remove: function () {
-            this.$emit('delete-note', this.note);
-        }
-    }
-});
-
-Vue.component('error-list', {
-    template: '#error_list_tpl',
-    props: ['errors']
-});
+Vue.component('note-row', require('./components/note-row.vue'));
 
 var resource;
 
@@ -102,7 +50,7 @@ const vm = new Vue({
         },
         updateNote: function (component) {
             resource.update({id: component.note.id}, component.draft).then((response) => {
-                assign(component.note, response.data.note);
+                utils.assign(component.note, response.data.note);
                 component.editing = false;
             }, (response) => {
                 component.errors = response.data.errors;
