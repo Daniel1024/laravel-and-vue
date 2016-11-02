@@ -38,9 +38,6 @@ Vue.component('note-row', {
         }
     },
     methods: {
-        remove: function () {
-            this.$emit('delete-note', this.note);
-        },
         edit: function () {
             this.errors = [];
             this.draft = JSON.parse(JSON.stringify(this.note));
@@ -51,6 +48,9 @@ Vue.component('note-row', {
         },
         update: function () {
             this.$emit('update-note', this);
+        },
+        remove: function () {
+            this.$emit('delete-note', this.note);
         }
     }
 });
