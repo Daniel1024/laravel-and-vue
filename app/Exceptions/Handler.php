@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
            if($exception->getMessage() != 'The given data failed to pass validation.') {
                 return new JsonResponse([
                     'success' => false,
-                    'errors' => [$exception->getMessage()]
+                    'message' => $exception->getMessage()
                 ], 404);
             }
         }
